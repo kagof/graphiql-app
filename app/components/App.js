@@ -209,9 +209,24 @@ export default class App extends React.Component {
         ]
       });
     }
-
+    console.log('headers', headers);
+    console.log('defaultHeaders', defaultHeaders);
     const requestHeaders = Object.assign({}, defaultHeaders, headers);
-    const url = new URL(endpoint);
+    console.log('requestHeaders', requestHeaders);
+
+    let url;
+    try {
+      url = new URL(endpoint);
+    } catch {
+      return Promise.resolve({
+        "data" : null,
+        "errors": [
+          {
+            "message": "Provide a valid URL to a GraphQL endpoint to start making queries to it!"
+          }
+        ]
+      });
+    }
 
     if (method == "get") {
       if (typeof graphQLParams['variables'] === "undefined"){
@@ -234,6 +249,7 @@ export default class App extends React.Component {
       rejectUnauthorized: false, // avoid problems with self-signed certs
     };
 
+    console.log('requestOptions', requestOptions);
     const request = url.protocol === 'https:' ? httpsRequest(requestOptions) : httpRequest(requestOptions);
 
     return new Promise((resolve, reject) => {
@@ -340,7 +356,7 @@ export default class App extends React.Component {
               <label htmlFor="endpoint">GraphQL Endpoint</label>
               <input type="text" className="pure-input-1-2" name="endpoint" value={currentTab.endpoint} onChange={this.handleChange.bind(this, 'endpoint')} placeholder="GraphQL Endpoint" />
 
-              <a href="javascript:;" className="pure-button pure-button-primary edit-headers-button" onClick={this.openHeaderEdit}>Edit HTTP Headers</a>
+              <a href={undefined} className="pure-button pure-button-primary edit-headers-button" onClick={this.openHeaderEdit}>Edit HTTP Headers</a>
 
               <div className="pure-control-group" style={{float: 'right'}}>
                 <label htmlFor="method">Method</label>
@@ -375,7 +391,7 @@ export default class App extends React.Component {
                 <li
                   key={tabIndex}
                   className={tabIndex === this.state.currentTabIndex ? 'active' : ''}>
-                  <a href="javascript:;"
+                  <a href={undefined}
                     onClick={this.handleTabClick.bind(this, tabIndex)}
                     onDoubleClick={this.handleTabDoubleClick.bind(this, tabIndex)}>
                     { this.state.editingTab === tabIndex ?

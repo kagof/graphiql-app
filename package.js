@@ -5,7 +5,6 @@ var cfg = require('./webpack/webpack.config.production.js');
 var packager = require('electron-packager');
 var assign = require('object-assign');
 var del = require('del');
-var latest = require('github-latest-release');
 var argv = require('minimist')(process.argv.slice(2));
 var devDeps = Object.keys(require('./package.json').devDependencies);
 
@@ -27,7 +26,7 @@ var DEFAULT_OPTS = {
   ].concat(devDeps.map(function(name) { return '/node_modules/' + name + '($|/)'; }))
 };
 
-var icon = argv.icon || argv.i || 'app/app.icns';
+var icon = argv.icon || argv.i || 'build/icon.icns';
 
 if (icon) {
   DEFAULT_OPTS.icon = icon;
@@ -35,20 +34,8 @@ if (icon) {
 
 var version = argv.version || argv.v;
 
-if (version) {
-  DEFAULT_OPTS.version = version;
-  startPack();
-} else {
-  latest('atom', 'electron', function(err, res) {
-    if (err) {
-      console.error("Error while fetching latest Electron release: " + err.message + "\n");
-      DEFAULT_OPTS.version = '0.28.3';
-    } else {
-      DEFAULT_OPTS.version = res.name.split('v')[1];
-    }
-    startPack();
-  });
-}
+DEFAULT_OPTS.version = version || '0.28.3';
+startPack();
 
 
 function startPack() {

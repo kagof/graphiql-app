@@ -38,7 +38,9 @@ module.exports = [
         crypto: require.resolve("crypto-browserify"),
       },
     },
+    devtool: "source-map",
     output: {
+      devtoolModuleFilenameTemplate: '[absolute-resource-path]',
       path: path.join(projectRoot, "dist"),
       filename: "bundle.js",
       libraryTarget: "commonjs2",

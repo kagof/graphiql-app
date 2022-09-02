@@ -16,7 +16,8 @@ export default class HTTPHeaderEditor extends React.Component {
   sendHeaderListUpdate() {
     if (this.props.onCreateHeaders) {
       this.props.onCreateHeaders(
-        _.zipObject(_.map(this.state.headers, (val) => [val.key, val.value]))
+        _.zipObject(_.map(this.state.headers, (val) => val.key), 
+        _.map(this.state.headers, (val) => val.value))
       );
     }
   }
@@ -191,7 +192,7 @@ export default class HTTPHeaderEditor extends React.Component {
     return (
       <div className="headerEditor">
         <h2 style={{float: 'left'}}>Edit HTTP Headers</h2>
-        <a href="javascript:;" style={{float: 'right', margin: '1.24em'}} onClick={this.addHeader} className="pure-button pure-button-primary">+ Add Header</a>
+        <a href={undefined} style={{float: 'right', margin: '1.24em'}} onClick={this.addHeader} className="pure-button pure-button-primary">+ Add Header</a>
         <div>
           <table className="pure-table pure-table-horizontal" style={styles.table}>
             <thead>

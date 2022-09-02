@@ -32,6 +32,7 @@ module.exports = [
         },
       ],
     },
+    devtool: "source-map",
     plugins: [new MiniCssExtractPlugin()],
     resolve: {
       modules: [__dirname + "../app", "node_modules"],
