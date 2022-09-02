@@ -32,15 +32,15 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.17.0",
     "crypto-browserify": "^3.12.0",
-    "graphiql": "^1.6.0",
-    "graphql": "^16.3.0",
+    "graphiql": "^2.0.3",
+    "graphql": "^16.6.0",
     "lodash": "^4.17.21",
     "mousetrap": "^1.6.5",
     "object-assign": "^4.1.1",
     "prop-types": "^15.8.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-modal": "^3.14.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-modal": "^3.15.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -69,7 +69,6 @@
     "minimist": "^1.2.5",
     "mocha": "^9.2.1",
     "raw-loader": "^4.0.2",
-    "react-hot-loader": "^4.13.0",
     "spectron": "^19.0.0",
     "stats-webpack-plugin": "^0.7.0",
     "style-loader": "^3.3.1",
@@ -79,9 +78,6 @@
     "webpack-dev-server": "^4.7.4"
   },
   "build": {
-    "files": [
-      "build/*"
-    ],
     "directories": {
       "output": "release"
     },

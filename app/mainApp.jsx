@@ -40,11 +40,12 @@ import 'mousetrap';
 
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import App from './components/App';
-
-const app = ReactDOM.render(<App />, document.getElementById('react-root'));
+const container = document.getElementById('react-root');
+const root = createRoot(container);
+const app = root.render(<App />);
 
 const ipcRenderer = window.require('electron').ipcRenderer;
 

@@ -3,7 +3,6 @@ import _ from 'lodash';
 import { v4 } from 'uuid';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import GraphiQL from 'graphiql/dist';
 import Modal from 'react-modal/lib/index';
 import { request as httpRequest } from 'http';
 import { request as httpsRequest } from 'https';
@@ -11,7 +10,8 @@ import { request as httpsRequest } from 'https';
 Modal.setAppElement(document.getElementById('react-root'));
 
 import HTTPHeaderEditor from './HTTPHeaderEditor';
-
+// import { useEditorContext } from '@graphiql/react';
+import { GraphiQLInterface, GraphiQLProvider, GraphiQL, useEditorContext } from 'graphiql';
 
 export default class App extends React.Component {
   constructor() {
@@ -145,8 +145,10 @@ export default class App extends React.Component {
   }
 
   exportQuery() {
-    const queryText = this.graphiql.getQueryEditor().getValue();
-    const variablesText = this.graphiql.getVariableEditor().getValue();
+    // const queryText = this.graphiql.getQueryEditor().getValue();
+    const { queryEditor, variableEditor } = useEditorContext();
+    const queryText = queryEditor.getValue();
+    const variablesText = variableEditor.getValue();
     const variables = variablesText ? JSON.parse(variablesText) : undefined;
     const queryObj = {
       query: queryText,
@@ -373,11 +375,17 @@ export default class App extends React.Component {
           {
             // THIS IS THE GROSSEST THING I'VE EVER DONE AND I HATE IT. FIXME ASAP
           }
-          <GraphiQL
-            ref={graphiql => this.graphiql = graphiql}
-            key={currentTabIndex + currentTab.endpoint + JSON.stringify(currentTab.headers)}
-            storage={getStorage(`graphiql:${currentTab.uuid}`)}
-            fetcher={this.graphQLFetcher} />
+          <MyComponent 
+            // graphiqlRef={graphiql => this.graphiql = graphiql} 
+            fetcher={(params) => this.graphQLFetcher(params)}
+            // key={currentTabIndex + currentTab.endpoint + JSON.stringify(currentTab.headers)}
+            // storage={getStorage(`graphiql:${currentTab.uuid}`)}
+            />
+          {/* <GraphiQL */}
+            {/* ref={graphiql => this.graphiql = graphiql} */}
+            {/* key={currentTabIndex + currentTab.endpoint + JSON.stringify(currentTab.headers)} */}
+            {/* storage={getStorage(`graphiql:${currentTab.uuid}`)} */}
+            {/* fetcher={this.graphQLFetcher} /> */}
         </div>
       </div>
     );
@@ -422,6 +430,44 @@ export default class App extends React.Component {
 }
 
 const _storages = {};
+
+// function MyComponent(fetcher, graphiqlRef, key, storage) {
+//   return (
+//     <GraphiQLProvider fetcher={fetcher}
+//       ref={graphiqlRef}
+//       key={key}
+//       storage={storage}>
+//       <InsideContext />
+//     </GraphiQLProvider>
+//   );
+// }
+
+function MyComponent(fetcher) {
+  console.log('fetcher', fetcher);
+  return (
+    <GraphiQL fetcher={(params) => fetcher(params)}>
+      <GraphiQL.Toolbar>
+        {/* Add custom styles for your buttons using the given class */}
+        <div className="button-group">
+          <button>1</button>
+          <button>2</button>
+          <button>3</button>
+        </div>
+      </GraphiQL.Toolbar>
+    </GraphiQL>
+  );
+}
+
+function InsideContext() {
+  // // Calling this hook would not work in `MyComponent` (it would return `null`)
+  // const { queryEditor } = useEditorContext();
+
+  // React.useEffect(() => {
+  //   const query = queryEditor.getValue();
+  // }, []);
+
+  return <GraphiQLInterface />;
+}
 
 function _makeStorage(storageKey) {
   return {
